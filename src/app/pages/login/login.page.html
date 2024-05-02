@@ -1,3 +1,74 @@
-<ion-content class="ion-no-margin">
-  <div class="h-full w-full bg-teal-100"></div>
+<ion-content class="ion-padding">
+  <div class="flex flex-col items-center justify-center h-full gap-6">
+    <div class="flex flex-col items-center justify-center">
+      <div
+        class="rounded-full bg-teal-50 flex items-center w-72 h-72 justify-center"
+      >
+        <img
+          src="assets/images/logo-removebg.png"
+          class="w-70 bg-red mb-3"
+          alt="portal logo"
+        />
+      </div>
+    </div>
+
+    <form
+      class="flex flex-col items-center justify-center w-full"
+      [formGroup]="form"
+      (submit)="onLogin()"
+    >
+      <ion-list class="w-full">
+        <ion-item>
+          <ion-input
+            type="text"
+            formControlName="dni"
+            required
+            label="D.N.I."
+            labelPlacement="stacked"
+          ></ion-input>
+        </ion-item>
+        @if (form.get('dni')?.dirty && form.get('dni')?.invalid) {
+        <app-error-input
+          class="mr-auto"
+          [message]="getErrorMessage('dni', form)"
+        ></app-error-input>
+        }
+        <ion-item>
+          <ion-input
+            type="password"
+            formControlName="password"
+            required
+            label="Contraseña"
+            labelPlacement="stacked"
+          >
+            <ion-input-password-toggle
+              slot="end"
+              color="success"
+            ></ion-input-password-toggle>
+          </ion-input>
+        </ion-item>
+        @if (form.get('password')?.dirty && form.get('password')?.invalid) {
+        <app-error-input
+          class="mr-auto"
+          [message]="getErrorMessage('password', form)"
+        ></app-error-input>
+
+        }
+      </ion-list>
+
+      <ion-button type="submit" class="w-full mt-4 uppercase"
+        >Ingresar</ion-button
+      >
+    </form>
+
+    <ion-button
+      type="button"
+      color="secondary"
+      fill="clear"
+      class="normal-case ml-auto -mt-2"
+      (click)="onOpenRecoveryPassword()"
+    >
+      Olvide mi contraseña
+    </ion-button>
+  </div>
 </ion-content>

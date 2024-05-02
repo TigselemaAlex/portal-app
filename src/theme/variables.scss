@@ -1,2 +1,25 @@
 // For information on how to create your own theme, please see:
 // http://ionicframework.com/docs/theming/
+
+ion-button {
+  --background: #10b981; // emerald-500
+  --background-hover: #a7f3d0;
+  --background-hover-opacity: 0.3;
+  --background-activated: #6ee7b7;
+  --background-activated-opacity: 0.5;
+  --background-focused: #6ee7b7;
+  --background-focused-opacity: 0.3;
+  --color: #f0fdf4;
+  font-weight: 600;
+  font-size: 16px;
+}
+
+ion-toolbar {
+  --background: #14b8a6; // emerald-500
+  --color: #f0fdf4;
+}
+
+ion-toast.success {
+  --background: #22c55e; // green-500
+  --color: #f0fdf4;
+}
