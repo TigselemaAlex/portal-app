@@ -1,0 +1,34 @@
+/* Sombra verde */
+.votation-in-process::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  width: 89%;
+  height: 95%;
+  margin: auto;
+  z-index: -1;
+  background-color: #14532d; /* Color de la sombra */
+  opacity: 0.5; /* Opacidad inicial de la sombra */
+  filter: blur(5px); /* Suaviza la sombra */
+  transform: scale(1); /* Expande la sombra ligeramente */
+  animation: pulsate 1s linear infinite; /* Animación de pulsación */
+}
+
+/* Animación de pulsación */
+@keyframes pulsate {
+  0% {
+    opacity: 0.5;
+    transform: scale(1.1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(0.9);
+  }
+  100% {
+    opacity: 0.5;
+    transform: scale(1.1);
+  }
+}

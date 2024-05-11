@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
-import { AuthLoginData } from 'src/app/shared/models/auth-login-data.model';
+import { AuthLoginData } from 'src/app/shared/models/request/auth/auth-login-data.model';
 import { MailResponse } from 'src/app/shared/models/response/auth/mail-response.model';
 import { JwtResponse } from 'src/app/shared/models/response/jwt/jwt-response.model';
 import { environment } from 'src/environments/environment';

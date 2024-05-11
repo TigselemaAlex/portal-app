@@ -1,0 +1,135 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="end">
+      <ion-button (click)="cancel()">Volver</ion-button>
+    </ion-buttons>
+    <ion-title class="text-xs">{{ convocation.subject }}</ion-title>
+  </ion-toolbar>
+  <ion-segment [(ngModel)]="selectedSegment">
+    <ion-segment-button value="assistance" (click)="getParticipants()">
+      <ion-label class="text-xs">Asistencia</ion-label>
+    </ion-segment-button>
+    <ion-segment-button value="voting" (click)="getQuestions()">
+      <ion-label class="text-xs">Votaciones</ion-label>
+    </ion-segment-button>
+  </ion-segment>
+</ion-header>
+<ion-content class="ion-padding">
+  <ion-refresher
+    slot="fixed"
+    [pullFactor]="0.5"
+    [pullMin]="100"
+    [pullMax]="200"
+    (ionRefresh)="doRefresh($event)"
+  >
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+
+  <div class="border-2 p-2 border-red-600 text-justify">
+    <p class="text-sm mb-2">
+      Estimado usuario la aplicación necesita el permiso de ubicación de su
+      dispositivo para verificar su asistencia física en la asamblea.
+    </p>
+    <p class="text-sm">
+      En caso de tener problemas, por favor acercarse a la mesa de directivos
+      para el registro manual de su asistencia.
+    </p>
+  </div>
+  @switch (selectedSegment) { @case ('assistance'){
+  <div class="mb-2">
+    <p
+      class="mb-2 text-red-300 bg-neutral-950 p-2 mt-1 text-sm rounded text-justify"
+    >
+      El registro de asistencia es por casa, por lo cual si posee más deberá
+      hacerlo por cada una.
+    </p>
+    <p>Listado de casas a su nombre:</p>
+    @for (participant of convocationParticipants; track participant.id) {
+    <ion-card>
+      <ion-card-header>
+        <div class="flex gap-1 justify-between">
+          <div>
+            <p class="font-bold">
+              Casa:
+              <span class="text-indigo-500">{{
+                participant.residence.number
+              }}</span>
+            </p>
+          </div>
+          <div>
+            <p class="font-bold">
+              Pasaje:
+              <span class="text-indigo-500">{{
+                participant.residence.passage.name
+              }}</span>
+            </p>
+          </div>
+        </div>
+        <div class="flex justify-end font-bold gap-2">
+          <span>Asistencia actual: </span>
+          <span
+            [ngClass]="
+              participant.attendance ? 'text-green-600' : 'text-red-600'
+            "
+          >
+            {{ participant.attendance ? "Presente" : "Falta" }}
+          </span>
+        </div>
+      </ion-card-header>
+      <ion-card-content>
+        <ion-button
+          expand="block"
+          (click)="registerAssistance(participant)"
+          color="secondary"
+          [disabled]="participant.attendance"
+        >
+          Registrar asistencia
+        </ion-button>
+      </ion-card-content>
+    </ion-card>
+    }
+  </div>
+  } @case ('voting'){
+  <p
+    class="mb-2 text-red-300 bg-neutral-950 p-2 mt-1 text-sm rounded text-justify"
+  >
+    Las preguntas de votación unicamente aparecerán cuando la directiva las
+    active. En caso de no verlas por favor deslice hacia abajo para refrescar la
+    pantalla.
+  </p>
+
+  <p>Listado de preguntas activas:</p>
+
+  @for (question of questions; track question.id) {
+  <ion-card color="dark">
+    <ion-card-header>
+      <ion-card-title
+        ><span class="text-emerald-300">Pregunta:</span>
+        {{ question.question }}</ion-card-title
+      >
+    </ion-card-header>
+    <ion-card-content>
+      <div class="mt-2">
+        Su voto actual:
+        <span class="font-bold text-emerald-300">{{
+          catchedVoteStatus[question.id]
+        }}</span>
+      </div>
+      <div class="flex gap-2">
+        <ion-button
+          class="uppercase w-full text-sm"
+          color="secondary"
+          (click)="onVote(question, true)"
+          >A favor</ion-button
+        >
+        <ion-button
+          class="uppercase w-full text-sm"
+          color="danger"
+          (click)="onVote(question, false)"
+          >En contra</ion-button
+        >
+      </div>
+    </ion-card-content>
+  </ion-card>
+  } } }
+</ion-content>

@@ -1,3 +1,4 @@
+import { addIcons } from 'ionicons';
 import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
@@ -28,11 +29,14 @@ import {
 import { AuthService } from 'src/app/core/services/api/auth.service';
 import { StorageService } from 'src/app/core/services/resource/storage.service';
 import { Router } from '@angular/router';
-import { AuthLoginData } from 'src/app/shared/models/auth-login-data.model';
+
 import { ErrorInputComponent } from 'src/app/shared/components/error-input/error-input.component';
 import { getErrorMessage } from 'src/app/common/formHandler';
 
 import { RecoverPasswordComponent } from './components/recover-password/recover-password.component';
+import { AuthLoginData } from 'src/app/shared/models/request/auth/auth-login-data.model';
+import { add, close } from 'ionicons/icons';
+import { PushNotificationService } from 'src/app/core/services/fcm/push-notification.service';
 
 @Component({
   selector: 'app-login',
@@ -68,8 +72,15 @@ export class LoginPage {
   private readonly router = inject(Router);
   private readonly modalCrtl = inject(ModalController);
   private readonly toastCtrl = inject(ToastController);
+  private readonly pushService = inject(PushNotificationService);
 
   protected readonly getErrorMessage = getErrorMessage;
+
+  constructor() {
+    addIcons({
+      close,
+    });
+  }
 
   form = this.fb.group({
     dni: ['', Validators.required],
@@ -80,27 +91,29 @@ export class LoginPage {
     if (this.form.valid) {
       const loginRequest: AuthLoginData = this.form.getRawValue();
       const toast = await this.toastCtrl.create({
-        duration: 3000,
+        duration: 2000,
+        position: 'top',
+        buttons: [
+          {
+            icon: 'close',
+            role: 'cancel',
+            handler: () => {
+              toast.dismiss();
+            },
+          },
+        ],
       });
       this.authService
         .login(loginRequest)
         .pipe()
         .subscribe({
           next: (jwt) => {
-            this.storageService.saveAuth(jwt)?.then(() => {
-              /* this.toastCtrl
-                .create({
-                  message: 'Bienvenido',
-                  duration: 2000,
-                })
-                .then((toast) => toast.present()); */
-
-              toast.message = 'Inicio de sesión exitoso';
-              toast.cssClass = 'success';
-              toast.present();
-
-              this.router.navigate(['/home']);
-            });
+            this.storageService.saveAuth(jwt);
+            toast.message = 'Inicio de sesión exitoso';
+            toast.cssClass = 'success';
+            toast.present();
+            this.pushService.initPush(jwt.id);
+            this.router.navigate(['/main']);
           },
           error: (error) => {
             this.storageService.clean();
@@ -131,7 +144,17 @@ export class LoginPage {
 
     const { data } = await modal.onWillDismiss();
     const toast = await this.toastCtrl.create({
-      duration: 3000,
+      duration: 2000,
+      position: 'top',
+      buttons: [
+        {
+          icon: 'close',
+          role: 'cancel',
+          handler: () => {
+            toast.dismiss();
+          },
+        },
+      ],
     });
     if (data) {
       this.authService.recoverPassword(data).subscribe({

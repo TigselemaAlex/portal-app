@@ -1,0 +1,62 @@
+<ion-content class="ion-padding">
+  <ion-refresher
+    slot="fixed"
+    [pullFactor]="0.5"
+    [pullMin]="100"
+    [pullMax]="200"
+    (ionRefresh)="doRefresh($event)"
+  >
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+  @if(!loading) { @if (convocation.id) {
+  <div class="relative">
+    <ion-card color="ligth" class="z-10">
+      <ion-card-header color="dark">
+        <ion-card-title>
+          <strong class="text-emerald-300"
+            >{{convocation.subject}}</strong
+          ></ion-card-title
+        >
+      </ion-card-header>
+
+      <div class="p-3 relative bg-neutral-50">
+        <p>
+          <strong class="text-teal-600">Fecha:</strong> {{ convocation.date |
+          date : "EEEE, dd/MM/yyyy" }}
+        </p>
+        <p>
+          <strong class="text-teal-600">Hora de inicio:</strong> {{
+          convocation.date | date : "HH:mm" }}
+        </p>
+        <p>
+          <strong class="text-teal-600">Lugar:</strong> {{convocation.place}}
+        </p>
+
+        <p class="p-1 bg-red-700 text-white mb-2 rounded text-center">
+          <strong>Fecha & hora límite de asistencia:</strong> <br />
+          {{ convocation.attendanceDeadline| date : "EEEE, dd/MM/yyyy HH:mm" }}
+        </p>
+        <ion-button expand="block" (click)="openConvocation(convocation)">
+          Asitencia / Votaciones
+        </ion-button>
+      </div>
+    </ion-card>
+  </div>
+
+  } @else {
+  <div class="flex h-full items-center gap-2 p-2">
+    <div
+      class="flex flex-col items-center gap-2 border-2 p-2 shadow rounded-lg"
+    >
+      <ion-icon
+        name="alert"
+        class="w-14 h-14 bg-yellow-500 rounded-full"
+      ></ion-icon>
+      <p class="text-center">
+        No hay asambleas para el día de hoy, para más información pongase en
+        contacto con la directiva o revise en el calendario de eventos.
+      </p>
+    </div>
+  </div>
+  } }
+</ion-content>

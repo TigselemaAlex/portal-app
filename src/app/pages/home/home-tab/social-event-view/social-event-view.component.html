@@ -1,0 +1,25 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="end">
+      <ion-button (click)="cancel()">Volver</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+<ion-content class="ion-padding">
+  <h2 class="text-teal-700 text-center uppercase text-3xl font-bold mb-2">
+    Portal de la Viña
+  </h2>
+  @if (event.imageUrl) {
+  <ion-img [src]="event.imageUrl" [alt]="event.title" class="mb-2"></ion-img>
+  }
+  <h3 class="text-teal-50 bg-teal-700 px-4 py-2 w-fit m-auto mb-2">
+    {{ event.title }}
+  </h3>
+  <p class="w-fit m-auto uppercase mb-4">EVENTO SOCIAL</p>
+  <p class="font-bold">
+    Fecha & hora: {{ event.date | date : "EEEE, dd/MM/yyyy HH:mm" }}
+  </p>
+  <p class="font-bold">Lugar: {{ event.place }}</p>
+
+  <div [innerHTML]="event.description" class="border p-2 mt-2"></div>
+</ion-content>

@@ -1,4 +1,4 @@
-package io.ionic.starter;
+package porta.vinia.app;
 
 import com.getcapacitor.BridgeActivity;
 

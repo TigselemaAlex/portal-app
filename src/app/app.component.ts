@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
-import { IonApp, IonRouterOutlet } from '@ionic/angular/standalone';
+import { Component, OnInit, inject } from '@angular/core';
+import { IonApp, IonRouterOutlet, Platform } from '@ionic/angular/standalone';
+import { PushNotificationService } from './core/services/fcm/push-notification.service';
 
 @Component({
   selector: 'app-root',

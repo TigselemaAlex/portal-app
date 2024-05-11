@@ -1,6 +1,5 @@
 import { Injectable, inject } from '@angular/core';
-import { Storage } from '@ionic/storage-angular';
-import { Drivers } from '@ionic/storage';
+
 import { JwtResponse } from 'src/app/shared/models/response/jwt/jwt-response.model';
 
 const JWT_KEY = 'auth-key';
@@ -8,35 +7,23 @@ const JWT_KEY = 'auth-key';
   providedIn: 'root',
 })
 export class StorageService {
-  private _storage: Storage | null = null;
-  private storage = inject(Storage);
-
-  constructor() {
-    this.init();
-  }
-
-  init() {
-    this.storage.create().then((storage) => {
-      this._storage = storage;
-      this._storage.set(JWT_KEY, null);
-    });
-  }
+  constructor() {}
 
   clean() {
-    this._storage?.clear();
+    localStorage.clear();
   }
 
   saveAuth(auth: JwtResponse) {
-    return this._storage?.set(JWT_KEY, auth);
+    localStorage.setItem(JWT_KEY, JSON.stringify(auth));
   }
 
   getAuth() {
-    return this._storage?.get(JWT_KEY).then((auth) => {
-      return auth;
-    });
+    const auth = localStorage.getItem(JWT_KEY);
+    return auth ? (JSON.parse(auth) as JwtResponse) : null;
   }
 
   isLogged() {
-    return this._storage?.get(JWT_KEY).then((auth) => !!auth);
+    const auth = localStorage.getItem(JWT_KEY);
+    return !!auth;
   }
 }

@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "851506294762",
+    "project_id": "portal-app-2b75b",
+    "storage_bucket": "portal-app-2b75b.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:851506294762:android:02aae46babe052a8744c93",
+        "android_client_info": {
+          "package_name": "porta.vinia.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAM79rnDNs0bvN0UESS-sBNVYnfAu23TG4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

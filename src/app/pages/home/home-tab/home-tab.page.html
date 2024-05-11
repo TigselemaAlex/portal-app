@@ -1,0 +1,64 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-segment [(ngModel)]="selectedSegment" color="light">
+      <ion-segment-button value="social">
+        <ion-label class="text-sm">Eventos sociales</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="assembly">
+        <ion-label class="text-sm">Asambleas</ion-label>
+      </ion-segment-button>
+    </ion-segment>
+  </ion-toolbar>
+</ion-header>
+<ion-content>
+  <ion-refresher
+    slot="fixed"
+    [pullFactor]="0.5"
+    [pullMin]="100"
+    [pullMax]="200"
+    (ionRefresh)="doRefresh($event)"
+  >
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+
+  <div class="p-3">
+    @switch (selectedSegment) { @case ('social'){
+
+    <ion-list>
+      @for (event of socialEvents;track event.id) {
+      <ion-item [button]="true" (click)="onViewEvent(event)">
+        <div class="flex gap-3 py-2">
+          @if (event.imageUrl) {
+          <ion-img
+            [src]="event.imageUrl"
+            [alt]="event.title"
+            class="w-1/4"
+          ></ion-img>
+          } @else {
+          <ion-img
+            src="assets/images/No_image_available.svg"
+            [alt]="'No imagen'"
+            class="w-1/4"
+          ></ion-img>
+          }
+          <div class="flex flex-col w-3/4">
+            <h2 class="text-lg font-bold text-teal-600">{{ event.title }}</h2>
+            <p class="text-sm">
+              <strong>Fecha & hora: </strong>
+              <br />
+              {{ event.date | date : "EEEE, dd/MM/yyyy HH:mm"}}
+            </p>
+            <p class="text-sm"><strong>Lugar: </strong>{{event.place}}</p>
+          </div>
+        </div>
+      </ion-item>
+      }
+    </ion-list>
+
+    } @case ('assembly'){ asambleas } }
+  </div>
+
+  <ion-infinite-scroll (ionInfinite)="onIonInfinite($event)">
+    <ion-infinite-scroll-content></ion-infinite-scroll-content>
+  </ion-infinite-scroll>
+</ion-content>
