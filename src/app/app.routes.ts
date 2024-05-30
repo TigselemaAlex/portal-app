@@ -52,10 +52,24 @@ export const routes: Routes = [
           ).then((m) => m.SuggestionBoxTabPage),
       },
       {
+        path: 'profile',
+        loadComponent: () =>
+          import('./pages/home/my-profile-tab/my-profile-tab.page').then(
+            (m) => m.MyProfileTabPage
+          ),
+      },
+      {
         path: '**',
         redirectTo: 'home',
         pathMatch: 'full',
       },
     ],
+  },
+  {
+    path: 'my-profile-tab',
+    loadComponent: () =>
+      import('./pages/home/my-profile-tab/my-profile-tab.page').then(
+        (m) => m.MyProfileTabPage
+      ),
   },
 ];

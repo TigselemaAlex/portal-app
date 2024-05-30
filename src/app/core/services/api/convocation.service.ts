@@ -30,4 +30,10 @@ export class ConvocationService {
       data
     );
   }
+
+  getConvocationCalendar(page?: number) {
+    return this.http.get<ApiResponse>(
+      `${this.END_POINT}/calendar?page=${page}`
+    );
+  }
 }

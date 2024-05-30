@@ -1,0 +1,29 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="end">
+      <ion-button (click)="cancel()">Volver</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+<ion-content class="ion-padding">
+  <h2 class="text-teal-700 text-center uppercase text-3xl font-bold mb-2">
+    Portal de la Viña
+  </h2>
+  <h3 class="text-teal-50 bg-teal-700 px-4 py-2 w-fit m-auto mb-2">
+    {{ convocation.subject }}
+  </h3>
+  <p class="w-fit m-auto uppercase mb-4">
+    {{
+      convocation.type === "ASSEMBLY_ORDINARY"
+        ? "Asamblea
+                Ordinaria"
+        : "Asamblea Extraordinaria"
+    }}
+  </p>
+  <p class="font-bold">
+    Fecha & hora: {{ convocation.date | date : "EEEE, dd/MM/yyyy HH:mm" }}
+  </p>
+  <p class="font-bold">Lugar: {{ convocation.place }}</p>
+
+  <div [innerHTML]="convocation.description" class="border p-2 mt-2"></div>
+</ion-content>

@@ -1,10 +1,10 @@
 <ion-header>
   <ion-toolbar>
     <ion-segment [(ngModel)]="selectedSegment" color="light">
-      <ion-segment-button value="social">
+      <ion-segment-button value="social" (click)="currentPage = 0">
         <ion-label class="text-sm">Eventos sociales</ion-label>
       </ion-segment-button>
-      <ion-segment-button value="assembly">
+      <ion-segment-button value="assembly" (click)="convocationCurrentPage = 0">
         <ion-label class="text-sm">Asambleas</ion-label>
       </ion-segment-button>
     </ion-segment>
@@ -23,6 +23,9 @@
 
   <div class="p-3">
     @switch (selectedSegment) { @case ('social'){
+    <p class="mb-2 text-red-300 bg-neutral-950 p-2 mt-1 text-sm rounded">
+      Los siguientes eventos sociales están programados para los próximos días.
+    </p>
 
     <ion-list>
       @for (event of socialEvents;track event.id) {
@@ -55,7 +58,52 @@
       }
     </ion-list>
 
-    } @case ('assembly'){ asambleas } }
+    } @case ('assembly'){
+    <p class="mb-2 text-red-300 bg-neutral-950 p-2 mt-1 text-sm rounded">
+      Las siguientes asambleas están programadas para los próximos días.
+    </p>
+
+    <ion-list>
+      @for (convocation of convocations;track convocation.id) {
+      <ion-item [button]="true" (click)="onViewConvocation(convocation)">
+        <ion-card color="ligth" class="w-full mx-0 px-0">
+          <ion-card-header color="dark">
+            <ion-card-title>
+              <strong class="text-emerald-300">{{convocation.subject}}</strong>
+              <br />
+              <strong class="text-purple-300 text-sm">
+                {{convocation.type === 'ASSEMBLY_ORDINARY' ? 'Asamblea
+                Ordinaria' : 'Asamblea Extraordinaria' }}
+              </strong>
+            </ion-card-title>
+          </ion-card-header>
+
+          <div class="p-3 relative bg-neutral-50">
+            <p>
+              <strong class="text-teal-600">Fecha:</strong> {{ convocation.date
+              | date : "EEEE, dd/MM/yyyy" }}
+            </p>
+            <p>
+              <strong class="text-teal-600">Hora de inicio:</strong> {{
+              convocation.date | date : "HH:mm" }}
+            </p>
+            <p>
+              <strong class="text-teal-600">Lugar:</strong>
+              {{convocation.place}}
+            </p>
+
+            <p class="p-1 bg-red-700 text-white mt-2 rounded text-center">
+              <strong>Fecha & hora límite de asistencia:</strong> <br />
+              {{ convocation.attendanceDeadline| date : "EEEE, dd/MM/yyyy HH:mm"
+              }}
+            </p>
+          </div>
+        </ion-card>
+      </ion-item>
+      }
+    </ion-list>
+
+    } }
   </div>
 
   <ion-infinite-scroll (ionInfinite)="onIonInfinite($event)">

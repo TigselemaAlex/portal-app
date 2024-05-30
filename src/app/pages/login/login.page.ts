@@ -84,7 +84,10 @@ export class LoginPage {
 
   form = this.fb.group({
     dni: ['', Validators.required],
-    password: ['', [Validators.required, Validators.minLength(6)]],
+    password: [
+      '',
+      [Validators.required, Validators.minLength(6), Validators.maxLength(15)],
+    ],
   });
 
   async onLogin() {

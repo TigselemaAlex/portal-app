@@ -1,13 +1,87 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>myHomeTab</ion-title>
-  </ion-toolbar>
-</ion-header>
+<ion-content class="ion-padding">
+  <ion-refresher
+    slot="fixed"
+    [pullFactor]="0.5"
+    [pullMin]="100"
+    [pullMax]="200"
+    (ionRefresh)="doRefresh($event)"
+  >
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>Información General</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-button expand="block" color="secondary" class="mb-4" (click)="openLastPaymentView()"
+        >Ver últimos pagos mensuales</ion-button
+      >
+      <ion-button expand="block" color="warning" class="mb-4" (click)="openLastPenaltyView()"
+        >Ver últimos pagos de multas</ion-button
+      >
+      <ion-button expand="block" color="danger" (click)="openPenaltyView()"
+        >Ver multas sin pagar</ion-button
+      >
+    </ion-card-content>
+  </ion-card>
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>Información de de adeudamiento</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      @for (detail of obligations.financialStatusDetails; track $index) {
+      <div
+        class="flex gap-2 justify-between mb-2 shadow-lg p-2 border bg-black text-white rounded"
+      >
+        <div class="w-fit">
+          <p><strong>Casa</strong></p>
+          <p class="text-emerald-500">{{detail.residence.number}}</p>
+        </div>
+        <div class="w-full flex gap-2 justify-end items-start">
+          @for (item of detail.complement; track $index) {
+          <div class="w-full">
+            <p class="capitalize"><strong>{{item.type}}</strong></p>
+            <p class="text-sm">
+              @if(item.parkingData)
+              {
+                @for (parking of item.parkingData; track $index) {
+                  <div>
+                      <p>{{parking.code}}</p>
+                          @if(parking.totalMonthsDelayed === 0){
+                            <span class="text-green-500">Al día</span>
+                            } @else if (parking.totalMonthsDelayed < 0 || parking.totalMonthsDelayed
+                            === null) {
+                            <span class="text-yellow-500">Sin registro</span>
+                            } @else {
+                            <span class="text-red-500"
+                              >{{parking.totalMonthsDelayed}} meses de retraso</span
+                            >
+                            }
+                  </div>
+                }
+                @if (item.parkingData.length === 0) {
+                <span class="text-yellow-500">Sin registro</span>
+                }
+              } @else {
+                @if(item.totalMonthsDelayed === 0){
+              <span class="text-green-500">Al día</span>
+              } @else if (item.totalMonthsDelayed < 0 || item.totalMonthsDelayed
+              === null) {
+              <span class="text-yellow-500">Sin registro</span>
+              } @else {
+              <span class="text-red-500"
+                >{{item.totalMonthsDelayed}} meses de retraso</span
+              >
+              }
+              }
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">myHomeTab</ion-title>
-    </ion-toolbar>
-  </ion-header>
+            </p>
+          </div>
+
+          }
+        </div>
+      </div>
+      }
+    </ion-card-content>
+  </ion-card>
 </ion-content>

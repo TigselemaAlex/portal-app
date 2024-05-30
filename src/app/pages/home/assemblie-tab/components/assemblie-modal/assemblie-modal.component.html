@@ -94,8 +94,10 @@
     class="mb-2 text-red-300 bg-neutral-950 p-2 mt-1 text-sm rounded text-justify"
   >
     Las preguntas de votación unicamente aparecerán cuando la directiva las
-    active. En caso de no verlas por favor deslice hacia abajo para refrescar la
-    pantalla.
+    active. Solo podrá votar si ha colocado su asistencia en la asamblea y se
+    encuentra en el lugar.
+    <br />
+    En caso de ser inquilino no podrá votar, solo los propietarios.
   </p>
 
   <p>Listado de preguntas activas:</p>
@@ -120,11 +122,13 @@
           class="uppercase w-full text-sm"
           color="secondary"
           (click)="onVote(question, true)"
+          [disabled]="validateAuth()"
           >A favor</ion-button
         >
         <ion-button
           class="uppercase w-full text-sm"
           color="danger"
+          [disabled]="validateAuth()"
           (click)="onVote(question, false)"
           >En contra</ion-button
         >

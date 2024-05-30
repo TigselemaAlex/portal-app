@@ -1,0 +1,179 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title slot="start">
+      <p class="text-base">
+        @if(unpaidAmount.length > 0) { Multas sin pagar } @else if
+        (paidPenalties.length > 0) { Últimos diez pagos de multas } @else
+        {Últimos diez pagos mensuales}
+      </p>
+    </ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="cancel()">Volver</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+<ion-content class="ion-padding">
+  @if(unpaidAmount.length > 0){
+  <ion-card color="dark">
+    <ion-card-header class="text-center"
+      ><strong>Adeudamiento General</strong></ion-card-header
+    >
+    <ion-card-content>
+      <div class="flex gap-2 flex-col">
+        @for(amountData of unpaidAmount; track $index) {
+        <div class="flex gap-2 justify-between">
+          <p>
+            Casa N°:
+            <strong class="text-emerald-500">{{
+              amountData.residence.number
+            }}</strong>
+          </p>
+          <p class="font-bold">
+            Monto:
+            <strong class="text-red-500">{{ amountData.amount }}$</strong>
+          </p>
+        </div>
+        }
+      </div>
+    </ion-card-content>
+  </ion-card>
+  <ion-card color="dark">
+    <ion-card-header class="text-center"
+      ><strong>Listado de multas</strong></ion-card-header
+    >
+
+    <ion-card-content>
+      @for (penalty of unpaidPenalties; track $index) {
+      @if(penalty.penalties.length > 0){
+      <h3 class="text-center text-indigo-300">
+        Multas de la casa n°:
+        <strong> {{ penalty.residence.number }}</strong>
+      </h3>
+
+      <ion-accordion-group class="mb-2">
+        @for (item of penalty.penalties; track $index) {
+        <ion-accordion class="rounded mb-1">
+          <ion-item slot="header" class="rounded py-1">
+            <div class="flex gap-1 flex-col text-sm">
+              <p>
+                Código:
+                <strong class="text-indigo-500">{{ item.code }}</strong>
+              </p>
+              <p>
+                Monto: <strong class="text-red-500">{{ item.amount }}$</strong>
+              </p>
+              <p>
+                Concepto: <strong>{{ item.type.name }}</strong>
+              </p>
+              <p>
+                Fecha de la infracción:
+                <strong>{{ item.issueDate | date : "dd/MM/yyyy" }}</strong>
+              </p>
+            </div>
+          </ion-item>
+          <div class="ion-padding" slot="content">
+            @if(item.evidences.length === 0){
+            <p
+              class="text-center bg-yellow-500 text-white px-3 py-2 rounded-lg"
+            >
+              No hay evidencias subidas, por favor contacte a la directiva para
+              mas información
+            </p>
+            } @for (evidence of item.evidences; track $index) {
+            <div class="flex gap-1">
+              <ion-img [src]="evidence.fileUrl" [alt]="evidence.fileName">
+              </ion-img>
+            </div>
+            }
+          </div>
+        </ion-accordion>
+        }
+      </ion-accordion-group>
+      } }
+    </ion-card-content>
+  </ion-card>
+
+  } @else if(paidPenalties.length > 0){
+  <ion-card color="dark">
+    <ion-card-header class="text-center"
+      ><strong>Listado de multas pagadas</strong></ion-card-header
+    >
+    <ion-card-content>
+      @for (penalty of paidPenalties; track $index) {
+      @if(penalty.penalties.length > 0){
+      <h3 class="text-center text-indigo-300">
+        Multas de la casa n°:
+        <strong> {{ penalty.residence.number }}</strong>
+      </h3>
+      <ion-list lines="none">
+        @for (item of penalty.penalties; track $index) {
+
+        <ion-item slot="header" class="rounded py-1">
+          <div class="flex gap-1 flex-col text-sm">
+            <p>
+              Código:
+              <strong class="text-indigo-500">{{ item.code }}</strong>
+            </p>
+            <p>
+              Monto: <strong class="text-green-500">{{ item.amount }}$</strong>
+            </p>
+            <p>
+              Concepto: <strong>{{ item.type.name }}</strong>
+            </p>
+            <p>
+              Fecha de la infracción:
+              <strong>{{ item.issueDate | date : "dd/MM/yyyy" }}</strong>
+            </p>
+            <p>
+              Fecha del pago:
+              <strong>{{ item.paidDate | date : "dd/MM/yyyy" }}</strong>
+            </p>
+          </div>
+        </ion-item>
+
+        }
+      </ion-list>
+      }}
+    </ion-card-content>
+  </ion-card>
+
+  } @else if (obligations.length > 0) {
+  <ion-card color="dark">
+    <ion-card-header class="text-center"
+      ><strong>Listado de pagos mensuales</strong></ion-card-header
+    >
+    <ion-card-content>
+      @for (obligation of obligations; track $index) {
+      @if(obligation.incomes.length > 0){
+      <h3 class="text-center text-indigo-300">
+        Pagos de la casa n°:
+        <strong> {{ obligation.residence.number }}</strong>
+      </h3>
+
+      <ion-list lines="none" class="py-1 mb-2 bg-transparent">
+        @for (item of obligation.incomes; track $index) {
+        <ion-item slot="header" class="py-1">
+          <div class="flex gap-1 flex-col text-sm">
+            <p>
+              Código:
+              <strong class="text-indigo-500">{{ item.code }}</strong>
+            </p>
+            <p>
+              Monto: <strong class="text-green-500">{{ item.amount }}$</strong>
+            </p>
+            <p>
+              Concepto: <strong>{{ item.type.name }}</strong>
+            </p>
+            <p>
+              Fecha del pago:
+              <strong>{{ item.paidDate | date : "dd/MM/yyyy" }}</strong>
+            </p>
+          </div>
+        </ion-item>
+        }
+      </ion-list>
+      }}
+    </ion-card-content>
+  </ion-card>
+  }
+</ion-content>

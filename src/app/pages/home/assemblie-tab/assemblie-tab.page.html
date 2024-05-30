@@ -9,14 +9,20 @@
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
   @if(!loading) { @if (convocation.id) {
+  <p class="mb-2 text-red-300 bg-neutral-950 p-2 mt-1 text-sm rounded">
+    Asamblea para el día de hoy.
+  </p>
   <div class="relative">
     <ion-card color="ligth" class="z-10">
       <ion-card-header color="dark">
         <ion-card-title>
-          <strong class="text-emerald-300"
-            >{{convocation.subject}}</strong
-          ></ion-card-title
-        >
+          <strong class="text-emerald-300">{{convocation.subject}}</strong>
+          <br />
+          <strong class="text-purple-300 text-sm">
+            {{convocation.type === 'ASSEMBLY_ORDINARY' ? 'Asamblea Ordinaria' :
+            'Asamblea Extraordinaria' }}
+          </strong>
+        </ion-card-title>
       </ion-card-header>
 
       <div class="p-3 relative bg-neutral-50">

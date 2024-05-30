@@ -23,6 +23,7 @@ import {
   calendarNumber,
   idCard,
   help,
+  person,
 } from 'ionicons/icons';
 
 if (environment.production) {
@@ -36,6 +37,7 @@ addIcons({
   calendarNumber,
   idCard,
   help,
+  person,
 });
 
 registerLocaleData(es);

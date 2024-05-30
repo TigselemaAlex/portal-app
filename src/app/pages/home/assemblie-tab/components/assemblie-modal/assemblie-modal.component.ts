@@ -33,6 +33,7 @@ import { IonRefresherCustomEvent } from '@ionic/core';
 import { VoteService } from 'src/app/core/services/api/vote.service';
 import { AssemblyQuestionResponse } from 'src/app/shared/models/response/vote/assembly-question-response.model';
 import { catchError, map, of } from 'rxjs';
+import { Device } from '@capacitor/device';
 
 @Component({
   selector: 'app-assemblie-modal',
@@ -155,11 +156,16 @@ export class AssemblieModalComponent implements OnInit {
 
       loading.present();
 
+      const deviceId = await Device.getId();
+
       const data: ConvocationParticipantAttendanceData = {
         latitude: coordinates.coords.latitude,
         longitude: coordinates.coords.longitude,
         residence: asistant.residence.id,
+        deviceId: deviceId.identifier,
       };
+
+      console.log(data);
 
       this.convocationService
         .updateParticipantAttendance(asistant.id, data)
@@ -230,6 +236,8 @@ export class AssemblieModalComponent implements OnInit {
         message: 'Validando y registrando su voto... espere por favor.',
       });
 
+      const deviceId = await Device.getId();
+
       loading.present();
       if (this.user) {
         const data = {
@@ -240,6 +248,7 @@ export class AssemblieModalComponent implements OnInit {
             latitude: coordinates.coords.latitude,
             longitude: coordinates.coords.longitude,
           },
+          deviceId: deviceId.identifier,
         };
 
         this.voteService.updateVote(data).subscribe({
@@ -269,6 +278,18 @@ export class AssemblieModalComponent implements OnInit {
         });
       }
     }
+  }
+
+  validateAuth() {
+    const jwt = this.storageService.getAuth();
+    if (jwt) {
+      const result = jwt.authorities.includes({ authority: 'ROLE_TENANT' });
+      if (result) {
+        return true;
+      }
+      return false;
+    }
+    return false;
   }
 
   doRefresh($event: IonRefresherCustomEvent<RefresherEventDetail>) {
