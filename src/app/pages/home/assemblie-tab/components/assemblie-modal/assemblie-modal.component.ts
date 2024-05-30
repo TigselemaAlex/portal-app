@@ -102,7 +102,6 @@ export class AssemblieModalComponent implements OnInit {
         .subscribe({
           next: (response) => {
             this.convocationParticipants = response.data;
-            console.log(this.convocationParticipants);
           },
           error: (error) => {
             const toast = this.toastCtrl.create({
@@ -136,6 +135,11 @@ export class AssemblieModalComponent implements OnInit {
   }
 
   async registerAssistance(asistant: ConvocationParticipantsResponse) {
+    const loading = await this.loadingCtrl.create({
+      message: 'Validando y registrando asistencia... espere por favor.',
+    });
+
+    await loading.present();
     const status = await Geolocation.requestPermissions();
     const toast = await this.toastCtrl.create({
       duration: 2000,
@@ -150,11 +154,6 @@ export class AssemblieModalComponent implements OnInit {
 
     if (status.coarseLocation === 'granted' || status.location === 'granted') {
       const coordinates = await Geolocation.getCurrentPosition();
-      const loading = await this.loadingCtrl.create({
-        message: 'Validando y registrando asistencia... espere por favor.',
-      });
-
-      loading.present();
 
       const deviceId = await Device.getId();
 
@@ -165,8 +164,6 @@ export class AssemblieModalComponent implements OnInit {
         deviceId: deviceId.identifier,
       };
 
-      console.log(data);
-
       this.convocationService
         .updateParticipantAttendance(asistant.id, data)
         .subscribe({
@@ -176,7 +173,7 @@ export class AssemblieModalComponent implements OnInit {
             setTimeout(() => {
               loading.dismiss();
               toast.present();
-            }, 1000);
+            }, 300);
             this.getParticipants();
           },
           error: (error) => {
@@ -191,9 +188,15 @@ export class AssemblieModalComponent implements OnInit {
             setTimeout(() => {
               loading.dismiss();
               toast.present();
-            }, 1000);
+            }, 300);
           },
         });
+    } else {
+      loading.dismiss();
+      toast.message = 'No se han otorgado permisos de ubicación.';
+      toast.duration = 3000;
+      toast.color = 'danger';
+      toast.present();
     }
   }
 
@@ -218,8 +221,11 @@ export class AssemblieModalComponent implements OnInit {
   }
 
   async onVote(question: AssemblyQuestionResponse, vote: boolean) {
+    const loading = await this.loadingCtrl.create({
+      message: 'Validando y registrando su voto... espere por favor.',
+    });
+    loading.present();
     const status = await Geolocation.requestPermissions();
-
     const toast = await this.toastCtrl.create({
       duration: 2000,
       position: 'top',
@@ -232,13 +238,9 @@ export class AssemblieModalComponent implements OnInit {
     });
     if (status.coarseLocation === 'granted' || status.location === 'granted') {
       const coordinates = await Geolocation.getCurrentPosition();
-      const loading = await this.loadingCtrl.create({
-        message: 'Validando y registrando su voto... espere por favor.',
-      });
 
       const deviceId = await Device.getId();
 
-      loading.present();
       if (this.user) {
         const data = {
           vote: vote,
@@ -259,7 +261,7 @@ export class AssemblieModalComponent implements OnInit {
             setTimeout(() => {
               loading.dismiss();
               toast.present();
-            }, 1000);
+            }, 300);
           },
           error: (error) => {
             if (error.error) {
@@ -273,10 +275,16 @@ export class AssemblieModalComponent implements OnInit {
             setTimeout(() => {
               loading.dismiss();
               toast.present();
-            }, 1000);
+            }, 300);
           },
         });
       }
+    } else {
+      loading.dismiss();
+      toast.message = 'No se han otorgado permisos de ubicación.';
+      toast.duration = 3000;
+      toast.color = 'danger';
+      toast.present();
     }
   }
 
