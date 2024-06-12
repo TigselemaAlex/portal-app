@@ -4,6 +4,9 @@ const config: CapacitorConfig = {
   appId: 'porta.vinia.app',
   appName: 'portal-app',
   webDir: 'www',
+  android: {
+    allowMixedContent: true,
+  },
   plugins: {
     PushNotifications: {
       presentationOptions: ['alert', 'sound'],

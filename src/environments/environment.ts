@@ -4,8 +4,7 @@
 
 export const environment = {
   production: false,
-  API_URL:
-    'http://ec2-3-145-150-231.us-east-2.compute.amazonaws.com:8090/portal/api/v1',
+  API_URL: 'https://www.api.portaldelavinia.com/portal/api/v1',
 };
 
 /*
